@@ -1,0 +1,32 @@
+{
+  "name": "food-app",
+  "version": "1.0.0",
+  "description": "This is react app by Rohith bagde",
+  "keywords": [
+    "react",
+    "react-dom"
+  ],
+  "homepage": "https://github.com/Rohith-bagde/food-app#readme",
+  "bugs": {
+    "url": "https://github.com/Rohith-bagde/food-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rohith-bagde/food-app.git"
+  },
+  "license": "ISC",
+  "author": "Rohith bagde",
+  "type": "commonjs",
+  "scripts": {
+  "start": "parcel index.html",
+  "build": "parcel build index.html",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "parcel": "^2.15.4"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
