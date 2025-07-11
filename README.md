@@ -19,9 +19,10 @@ Body
   -Copyright
   -Address
 
-// useState to manage the filtered restaurants
-// Initially, set filteredRestaurants to the complete list of restaurants
-// so that all restaurants are displayed initially
+- for useState
+  // useState to manage the filtered restaurants
+  // Initially, set filteredRestaurants to the complete list of restaurants
+  // so that all restaurants are displayed initially
 
-    // useState is a React Hook that lets you add state to functional components
-    // Here, filteredRestaurants is the state variable and setFilteredRestaurants is the function to update it
+      // useState is a React Hook that lets you add state to functional components
+      // Here, filteredRestaurants is the state variable and setFilteredRestaurants is the function to update it
