@@ -1,71 +1,8 @@
-
-import ReactDOM from "react-dom/client";
-
-/*
-Header 
--Logo
--Nav Items
-Body
--Search
--Restaurant Container
-- Restaurant Card
-    -rating
-    -name   
-    -cuisines
-    -cost for two
-    -delivery time
-Footer
--Links
--Contact
--Copyright
--Address
-*/
-
-const Header = () => {
-  return (
-    <div className="header">
-        <div className="logo-container">
-            <img 
-            className="logo" 
-            src="https://i.pinimg.com/736x/6c/8f/ac/6c8fac06bf158a157a3123d48635c582.jpg"
-            />
-        </div>
-        <div className="nav-items">
-            <ul>
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-                <li>Cart</li>
-            </ul>
-        </div>
-    </div>
-  );
-};
-
-// RestaurantCard Component
-const RestaurantCard = (props) => {
-    const { resData } = props;
-
-const {cloudinaryImageId, name, cuisines, avgRating, costForTwo, deliveryTime} = resData;
-
-    return (
-        <div className="res-card" style={{ backgroundColor: "lightgray" }}>
-            <img
-                className="res-logo"
-                src={"https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/" + cloudinaryImageId}
-                alt="Restaurant Logo"
-            />
-            <h2>{name}</h2>
-            <h3>{cuisines.join(", ")}</h3>
-            <h4>Rating: {avgRating}</h4>
-            <h4>Cost for Two: {costForTwo}</h4>
-            <h4>Delivery Time: {deliveryTime} mins</h4>
-        </div>
-    );
-};
+import { CDN_URL, LOGO_URL } from "../utils/constants";
 
 const resObj = [
   {
+    id: "1",
     name: "Theobroma",
     cuisines: ["Bakery", "Desserts"],
     avgRating: "4.5",
@@ -74,6 +11,7 @@ const resObj = [
     deliveryTime: 20
   },
   {
+    id: "2",
     name: "FreshMenu",
     cuisines: ["Continental", "Chinese"],
     avgRating: "4.4",
@@ -82,6 +20,7 @@ const resObj = [
     deliveryTime: 25
   },
   {
+    id: "3",
     name: "KFC",
     cuisines: ["Fast Food", "Burgers"],
     avgRating: "4.0",
@@ -90,6 +29,7 @@ const resObj = [
     deliveryTime: 30
   },
   {
+    id: "4",
     name: "McDonald's",
     cuisines: ["Burgers", "Beverages"],
     avgRating: "4.1",
@@ -98,6 +38,7 @@ const resObj = [
     deliveryTime: 35
   },
   {
+    id: "5",
     name: "Pizza Hut",
     cuisines: ["Pizza", "Pasta"],
     avgRating: "4.0",
@@ -106,6 +47,7 @@ const resObj = [
     deliveryTime: 30
   },
   {
+    id: "6",
     name: "Nandhana Palace",
     cuisines: ["Biryani", "Chinese"],
     avgRating: "4.4",
@@ -114,6 +56,7 @@ const resObj = [
     deliveryTime: 30
   },
   {
+    id: "7",
     name: "Truffles",
     cuisines: ["American", "Continental"],
     avgRating: "4.6",
@@ -122,6 +65,7 @@ const resObj = [
     deliveryTime: 35
   },
   {
+    id: "8",
     name: "Thalaiva biryani",
     cuisines: ["Biryani", "Muglai"],
     avgRating: "4.6",
@@ -130,6 +74,7 @@ const resObj = [
     deliveryTime: 30
   },
   {
+    id: "9",
     name: "Mehfil Biryani",
     cuisines: ["Andhra", "Biryani"],
     avgRating: "4.3",
@@ -138,14 +83,16 @@ const resObj = [
     deliveryTime: 35
   },
   {
+    id: "10",
     name: "RBR biryani",
     cuisines: ["Biryani", "North Indian"],
-    avgRating: "4.5",
+    avgRating: "3.9",
     cloudinaryImageId: "jhdven0c7dkmypffoigf",
     costForTwo: "₹700 for two",
     deliveryTime: 30
   },
   {
+    id: "11",
     name: "Santhosh Dhaba",
     cuisines: ["South Indian", "Snacks"],
     avgRating: "4.2",
@@ -154,6 +101,7 @@ const resObj = [
     deliveryTime: 25
   },
   {
+    id: "12",
     name: "Behrouz Biryani",
     cuisines: ["Biryani", "North Indian"],
     avgRating: "4.3",
@@ -163,36 +111,4 @@ const resObj = [
   }
 ];
 
-function Body() {
-    return (
-        <div className="body">
-            <div className="search-container">
-                <input type="text" placeholder="Search..." />
-            </div>
-            <div className="res-container">
-                {
-                    resObj.map((restaurant) => {
-                        return <RestaurantCard key={restaurant.name} resData={restaurant} />;
-                    })
-                }
-
-            </div>
-        </div>
-    );
-}
-
-const AppLayout = () => {
-  return (
-    <div className="app">
-      <Header />
-      <Body />
-    </div>
-  );
-};
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-
-root.render(<AppLayout />);
-
-
-
+export default resObj;

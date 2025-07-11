@@ -55,3 +55,16 @@
     margin-bottom: 10px;
 
 }   
+
+.filter {
+    display: flex;
+    margin: 10px;
+}
+.filter-btn {
+    padding: 10px;
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
