@@ -7,7 +7,8 @@ const Body = () => {
     // Initially, set filteredRestaurants to the complete list of restaurants
     // so that all restaurants are displayed initially
     const [filteredRestaurants, setFilteredRestaurants] = useState(resObj);
-
+    // useState is a React Hook that lets you add state to functional components
+    // Here, filteredRestaurants is the state variable and setFilteredRestaurants is the function to update it
 
     return (
         <div className="body">
