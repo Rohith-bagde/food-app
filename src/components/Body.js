@@ -32,16 +32,13 @@ const Body = () => {
                     <input type="text" className="search-input" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
                     <button onClick={() => {
                         console.log("Searching for:", searchText);
-                        
                         // Filter the restaurants based on the search text
                         const searchedRestaurants = resObj.filter(restaurant => restaurant.name.toLowerCase().includes(searchText.toLowerCase()));
                         setFilteredRestaurants(searchedRestaurants);
-
-
                     }}>Search</button>
                 </div>
                 <button className="filter-btn" onClick={() => {
-                    const topRatedRestaurants = filteredRestaurants.filter(restaurant => restaurant.avgRating >= 4.2);
+                    const topRatedRestaurants = resObj.filter(restaurant => restaurant.avgRating >= 4.2);
                     setFilteredRestaurants(topRatedRestaurants);
 
                 }
