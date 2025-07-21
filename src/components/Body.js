@@ -40,7 +40,6 @@ const Body = () => {
                 <button className="filter-btn" onClick={() => {
                     const topRatedRestaurants = resObj.filter(restaurant => restaurant.avgRating >= 4.2);
                     setFilteredRestaurants(topRatedRestaurants);
-
                 }
                 }>Top Rated Restaurants</button>
             </div>
