@@ -1,11 +1,15 @@
 import React from "react";
 import { CDN_URL } from "../utils/constants";
+import { motion } from "framer-motion";
 
 const safeImg = (id) => {
   if (!id) return "";
-  return id.startsWith("http") || id.includes("/")
-    ? CDN_URL + id
-    : CDN_URL + id;
+  return CDN_URL + id;
+};
+
+const cardVariants = {
+  initial: { opacity: 0, y: 12, scale: 0.98 },
+  animate: { opacity: 1, y: 0, scale: 1 },
 };
 
 const RestaurantCard = ({ resData }) => {
@@ -18,13 +22,18 @@ const RestaurantCard = ({ resData }) => {
     deliveryTime = "",
     liveUpdatedAt,
   } = resData || {};
+
   const imgSrc = safeImg(cloudinaryImageId);
 
   return (
-    <article
+    <motion.article
       className="res-card glass"
       tabIndex={0}
       aria-label={`${name} — rating ${avgRating}`}
+      variants={cardVariants}
+      initial="initial"
+      animate="animate"
+      transition={{ duration: 0.3 }}
     >
       <div className="res-thumb">
         {imgSrc ? (
@@ -57,7 +66,7 @@ const RestaurantCard = ({ resData }) => {
           </small>
         )}
       </div>
-    </article>
+    </motion.article>
   );
 };
 

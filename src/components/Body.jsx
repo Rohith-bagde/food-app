@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import resObjInit from "../utils/localData";
 import RestaurantCard from "./RestaurantCard";
+import { fetchRestaurants, subscribeRestaurantUpdates } from "../services/fakeApi";
 
 function useDebounce(value, delay) {
   const [debounced, setDebounced] = useState(value);
@@ -14,60 +14,66 @@ function useDebounce(value, delay) {
 const Body = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const debouncedSearch = useDebounce(searchText, 300);
   const [onlyTopRated, setOnlyTopRated] = useState(false);
   const [sortBy, setSortBy] = useState("relevance");
 
-  useEffect(() => {
-    setRestaurants(resObjInit);
-  }, []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [connected, setConnected] = useState(false);
+
+  const debouncedSearch = useDebounce(searchText, 300);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setRestaurants((prev) => {
-        const copy = prev.map((r) => ({ ...r }));
-        if (copy.length === 0) return copy;
-        const idx = Math.floor(Math.random() * copy.length);
-        const delta = Math.random() * 0.2 - 0.1;
-        const newRating = Math.max(
-          2.5,
-          Math.min(5, parseFloat(copy[idx].avgRating) + delta)
-        );
-        copy[idx].avgRating = newRating.toFixed(1);
-        copy[idx].deliveryTime = Math.max(
-          10,
-          copy[idx].deliveryTime + Math.floor(Math.random() * 8 - 2)
-        );
-        copy[idx].liveUpdatedAt = new Date().toISOString();
-        return copy;
+    let unsub = null;
+
+    fetchRestaurants()
+      .then((data) => {
+        setRestaurants(data);
+        setLoading(false);
+        setConnected(true);
+
+        unsub = subscribeRestaurantUpdates(data, (updatedList) => {
+          setRestaurants(updatedList);
+        });
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load restaurants.");
+        setLoading(false);
       });
-    }, 5000);
 
-    return () => clearInterval(id);
+    return () => {
+      if (unsub) unsub();
+    };
   }, []);
 
   const visible = useMemo(() => {
     let list = restaurants.slice();
+
     if (debouncedSearch) {
       const q = debouncedSearch.toLowerCase();
       list = list.filter(
         (r) =>
-          (r.name && r.name.toLowerCase().includes(q)) ||
-          (r.cuisines && r.cuisines.join(", ").toLowerCase().includes(q))
+          r.name.toLowerCase().includes(q) ||
+          r.cuisines.join(", ").toLowerCase().includes(q)
       );
     }
+
     if (onlyTopRated) {
       list = list.filter((r) => parseFloat(r.avgRating) >= 4.2);
     }
-    if (sortBy === "rating")
+
+    if (sortBy === "rating") {
       list.sort((a, b) => parseFloat(b.avgRating) - parseFloat(a.avgRating));
-    if (sortBy === "delivery")
+    } else if (sortBy === "delivery") {
       list.sort((a, b) => a.deliveryTime - b.deliveryTime);
+    }
+
     return list;
   }, [restaurants, debouncedSearch, onlyTopRated, sortBy]);
 
   return (
-    <section className="body container">
+    <section className="body">
+      {/* Controls */}
       <div className="controls glass">
         <div className="search">
           <input
@@ -79,7 +85,6 @@ const Body = () => {
           <button
             className="search-btn"
             onClick={() => setSearchText("")}
-            title="Clear"
           >
             Clear
           </button>
@@ -105,16 +110,34 @@ const Body = () => {
         </div>
       </div>
 
-      <div className="res-container">
-        {visible.length === 0 ? (
-          <div className="empty-state glass">No restaurants found.</div>
-        ) : (
-          visible.map((r) => <RestaurantCard key={r.id} resData={r} />)
+      {/* Status line */}
+      <div style={{ padding: "0 20px 8px", fontSize: 13 }}>
+        {loading && <span>⏳ Loading restaurants from server...</span>}
+        {!loading && error && (
+          <span style={{ color: "#ff6b6b" }}>⚠ {error}</span>
+        )}
+        {!loading && !error && connected && (
+          <span style={{ color: "#4ade80" }}>● Live connection active (fake backend)</span>
         )}
       </div>
 
+      {/* Content */}
+      <div className="res-container">
+        {loading && (
+          <div className="empty-state glass">Fetching data...</div>
+        )}
+
+        {!loading && !error && visible.length === 0 && (
+          <div className="empty-state glass">No restaurants found.</div>
+        )}
+
+        {!loading &&
+          !error &&
+          visible.map((r) => <RestaurantCard key={r.id} resData={r} />)}
+      </div>
+
       <footer className="live-note">
-        Live updates: ratings and delivery times change every 5s (simulated)
+        Live updates: ratings & delivery times change every few seconds (simulated)
       </footer>
     </section>
   );
