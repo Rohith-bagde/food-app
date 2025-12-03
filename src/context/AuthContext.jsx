@@ -1,36 +1,39 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
-export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("authUser");
+    return saved ? JSON.parse(saved) : null;
+  });
 
-  // Load logged-in user (if any) from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem("user");
-    if (saved) setUser(JSON.parse(saved));
-  }, []);
+    if (user) localStorage.setItem("authUser", JSON.stringify(user));
+    else localStorage.removeItem("authUser");
+  }, [user]);
 
-  const login = (email, password) => {
-    const saved = JSON.parse(localStorage.getItem("userDB"));
-    if (!saved || saved.email !== email || saved.password !== password) {
-      return { success: false, message: "Incorrect email or password" };
+  const register = ({ name, email, password }) => {
+    const data = { name, email, password };
+    localStorage.setItem("authUserData", JSON.stringify(data));
+    setUser({ name, email });
+    return { ok: true, message: "Registered successfully" };
+  };
+
+  const login = ({ email, password }) => {
+    const stored = localStorage.getItem("authUserData");
+    if (!stored) {
+      return { ok: false, message: "No user registered. Please register." };
     }
-    localStorage.setItem("user", JSON.stringify(saved));
-    setUser(saved);
-    return { success: true };
+    const data = JSON.parse(stored);
+    if (data.email === email && data.password === password) {
+      setUser({ name: data.name, email: data.email });
+      return { ok: true, message: "Login successful" };
+    }
+    return { ok: false, message: "Invalid credentials" };
   };
 
-  const register = (email, password) => {
-    localStorage.setItem("userDB", JSON.stringify({ email, password }));
-    return { success: true };
-  };
-
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
+  const logout = () => setUser(null);
 
   return (
     <AuthContext.Provider value={{ user, login, register, logout }}>
@@ -38,3 +41,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

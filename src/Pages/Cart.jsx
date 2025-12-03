@@ -1,64 +1,42 @@
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const { cart, increaseQty, decreaseQty, removeFromCart, totalAmount } =
-    useCart();
-  const { user } = useAuth();
+  const { cart, increaseQty, decreaseQty, removeItem, total } = useCart();
 
-  if (!user)
-    return (
-      <h2 className="container glass">
-        You must <Link to="/login">login</Link> to view your cart.
-      </h2>
-    );
-
-  if (cart.length === 0)
-    return <h2 className="container glass">Your cart is empty 🛒</h2>;
+  if (cart.length === 0) {
+    return <h2 className="container glass">Your cart is empty</h2>;
+  }
 
   return (
     <div className="container glass">
-      <h2>Your Cart</h2>
+      <h1>Your Cart</h1>
 
       {cart.map((item) => (
-        <div key={item.id} className="menu-item glass">
+        <div className="menu-item glass" key={item.id}>
           <div>
             <h3>{item.name}</h3>
+            {item.restaurantName && (
+              <p style={{ opacity: 0.7 }}>{item.restaurantName}</p>
+            )}
             <p>₹{item.price}</p>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <button
-              onClick={() => decreaseQty(item.id)}
-              className="filter-btn"
-            >
+          <div className="cart-actions">
+            <button className="filter-btn" onClick={() => decreaseQty(item.id)}>
               -
             </button>
-            <span style={{ fontSize: "18px" }}>{item.qty}</span>
-            <button
-              onClick={() => increaseQty(item.id)}
-              className="filter-btn"
-            >
+            <span>{item.qty}</span>
+            <button className="filter-btn" onClick={() => increaseQty(item.id)}>
               +
             </button>
-
-            <button
-              onClick={() => removeFromCart(item.id)}
-              className="filter-btn active"
-              style={{ background: "red" }}
-            >
+            <button className="search-btn" onClick={() => removeItem(item.id)}>
               Remove
             </button>
           </div>
         </div>
       ))}
 
-      <h3 style={{ marginTop: "20px" }}>Total: ₹{totalAmount}</h3>
-
-      <button className="login-btn" style={{ marginTop: "20px" }}>
-        Proceed to Checkout
-      </button>
+      <h2 style={{ marginTop: "16px" }}>Total: ₹{total}</h2>
     </div>
   );
 };

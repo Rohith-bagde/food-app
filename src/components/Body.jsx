@@ -1,28 +1,17 @@
-import React, { useState, useEffect, useMemo } from "react";
-import RestaurantCard from "./RestaurantCard";
+import { useMemo, useState } from "react";
 import localData from "../utils/localData";
-
-function useDebounce(value, delay) {
-  const [debounced, setDebounced] = useState(value);
-  useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return debounced;
-}
+import RestaurantCard from "./RestaurantCard";
 
 const Body = () => {
   const [searchText, setSearchText] = useState("");
   const [onlyTopRated, setOnlyTopRated] = useState(false);
   const [sortBy, setSortBy] = useState("relevance");
 
-  const debouncedSearch = useDebounce(searchText, 300);
-
   const visibleRestaurants = useMemo(() => {
     let list = [...localData];
 
-    if (debouncedSearch) {
-      const q = debouncedSearch.toLowerCase();
+    if (searchText) {
+      const q = searchText.toLowerCase();
       list = list.filter(
         (r) =>
           r.name.toLowerCase().includes(q) ||
@@ -31,17 +20,19 @@ const Body = () => {
     }
 
     if (onlyTopRated) {
-      list = list.filter((r) => parseFloat(r.avgRating) >= 4.2);
+      list = list.filter((r) => parseFloat(r.avgRating) >= 4.3);
     }
 
     if (sortBy === "rating") {
-      list.sort((a, b) => parseFloat(b.avgRating) - parseFloat(a.avgRating));
+      list.sort(
+        (a, b) => parseFloat(b.avgRating) - parseFloat(a.avgRating)
+      );
     } else if (sortBy === "delivery") {
       list.sort((a, b) => a.deliveryTime - b.deliveryTime);
     }
 
     return list;
-  }, [debouncedSearch, onlyTopRated, sortBy]);
+  }, [searchText, onlyTopRated, sortBy]);
 
   return (
     <section className="body">
@@ -80,7 +71,7 @@ const Body = () => {
 
       <div className="res-container">
         {visibleRestaurants.map((r) => (
-          <RestaurantCard key={r.id} resData={r} />
+          <RestaurantCard key={r.id} res={r} />
         ))}
       </div>
     </section>
