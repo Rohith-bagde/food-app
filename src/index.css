@@ -51,10 +51,12 @@ a {
 }
 
 .logo {
-  width: 54px;
-  height: 54px;
+  width: 46px;
+  height: 46px;
   border-radius: 14px;
-  object-fit: cover;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px;
 }
 
 .nav-items {

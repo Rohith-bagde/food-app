@@ -22,7 +22,7 @@ const Header = () => {
     <header className="header glass">
       <div className="header-left">
         <img src={LOGO_URL} alt="logo" className="logo" />
-        <h2 className="app-title">Food Live</h2>
+        <h2 className="app-title">FlavorFlow</h2>
       </div>
 
       <nav className="nav-items">
