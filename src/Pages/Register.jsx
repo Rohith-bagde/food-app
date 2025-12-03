@@ -1,23 +1,24 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const { login } = useAuth();
+const Register = () => {
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const submit = () => {
-    const res = login(email, password);
-    if (!res.success) return alert(res.message);
-    navigate("/");
+    if (!email || !password) return alert("Enter email & password");
+    register(email, password);
+    alert("Registered successfully! Please login.");
+    navigate("/login");
   };
 
   return (
     <div className="form glass">
-      <h2>Login</h2>
+      <h2>Create Account</h2>
 
       <input
         placeholder="Email"
@@ -31,13 +32,9 @@ const Login = () => {
         value={password}
       />
 
-      <button onClick={submit}>Login</button>
-
-      <p>
-        New user? <Link to="/register">Register</Link>
-      </p>
+      <button onClick={submit}>Register</button>
     </div>
   );
 };
 
-export default Login;
+export default Register;

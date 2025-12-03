@@ -1,20 +1,12 @@
-import { useState, useEffect } from "react";
-
-const About = () => {
-  const [time, setTime] = useState(new Date());
-
-  useEffect(() => {
-    const t = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  return (
-    <div className="glass container" style={{ padding: "20px" }}>
-      <h2>About This App</h2>
-      <p>This project shows real-time restaurant updates.</p>
-      <p>Current Time: {time.toLocaleTimeString()}</p>
-    </div>
-  );
-};
+const About = () => (
+  <div className="container glass">
+    <h2>About Food Live</h2>
+    <p>
+      Food Live is a demo food ordering app built using React, React Router,
+      context APIs, and local dummy data. It’s designed to mimic a Swiggy-style
+      experience without needing any backend or real APIs.
+    </p>
+  </div>
+);
 
 export default About;

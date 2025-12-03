@@ -1,31 +1,42 @@
 import { Link } from "react-router-dom";
 import { LOGO_URL } from "../utils/constants";
-import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
-  const [btnName, setBtnName] = useState("Login");
+  const { user, logout } = useAuth();
 
   return (
     <header className="header glass">
       <div className="header-left">
-        <img className="logo" src={LOGO_URL} alt="logo" />
-        <h1 className="app-title">Food Live</h1>
+        <img src={LOGO_URL} className="logo" alt="logo" />
+        <h2>Food Live</h2>
       </div>
 
       <nav className="nav-items">
         <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
-          <li><Link to="/cart">Cart</Link></li>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+          <li>
+            <Link to="/cart">Cart</Link>
+          </li>
         </ul>
 
-        <button
-          className="login-btn"
-          onClick={() => setBtnName(btnName === "Login" ? "Logout" : "Login")}
-        >
-          <Link to="/login">{btnName}</Link>
-        </button>
+        {user ? (
+          <button className="login-btn" onClick={logout}>
+            Logout
+          </button>
+        ) : (
+          <Link to="/login" className="login-btn">
+            Login
+          </Link>
+        )}
       </nav>
     </header>
   );

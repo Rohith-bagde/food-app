@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import RestaurantCard from "./RestaurantCard";
-import { fetchRestaurants, subscribeRestaurantUpdates } from "../services/fakeApi";
+import localData from "../utils/localData";
 
 function useDebounce(value, delay) {
   const [debounced, setDebounced] = useState(value);
@@ -12,42 +12,14 @@ function useDebounce(value, delay) {
 }
 
 const Body = () => {
-  const [restaurants, setRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [onlyTopRated, setOnlyTopRated] = useState(false);
   const [sortBy, setSortBy] = useState("relevance");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [connected, setConnected] = useState(false);
-
   const debouncedSearch = useDebounce(searchText, 300);
 
-  useEffect(() => {
-    let unsub = null;
-
-    fetchRestaurants()
-      .then((data) => {
-        setRestaurants(data);
-        setLoading(false);
-        setConnected(true);
-
-        unsub = subscribeRestaurantUpdates(data, (updatedList) => {
-          setRestaurants(updatedList);
-        });
-      })
-      .catch((err) => {
-        setError(err.message || "Failed to load restaurants.");
-        setLoading(false);
-      });
-
-    return () => {
-      if (unsub) unsub();
-    };
-  }, []);
-
-  const visible = useMemo(() => {
-    let list = restaurants.slice();
+  const visibleRestaurants = useMemo(() => {
+    let list = [...localData];
 
     if (debouncedSearch) {
       const q = debouncedSearch.toLowerCase();
@@ -69,11 +41,10 @@ const Body = () => {
     }
 
     return list;
-  }, [restaurants, debouncedSearch, onlyTopRated, sortBy]);
+  }, [debouncedSearch, onlyTopRated, sortBy]);
 
   return (
     <section className="body">
-      {/* Controls */}
       <div className="controls glass">
         <div className="search">
           <input
@@ -82,10 +53,7 @@ const Body = () => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
-          <button
-            className="search-btn"
-            onClick={() => setSearchText("")}
-          >
+          <button className="search-btn" onClick={() => setSearchText("")}>
             Clear
           </button>
         </div>
@@ -93,15 +61,15 @@ const Body = () => {
         <div className="filters">
           <button
             className={`filter-btn ${onlyTopRated ? "active" : ""}`}
-            onClick={() => setOnlyTopRated((s) => !s)}
+            onClick={() => setOnlyTopRated((prev) => !prev)}
           >
-            Top Rated
+            ⭐ Top Rated
           </button>
 
           <select
+            className="sort-select"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="sort-select"
           >
             <option value="relevance">Sort: Relevance</option>
             <option value="rating">Sort: Rating</option>
@@ -110,35 +78,11 @@ const Body = () => {
         </div>
       </div>
 
-      {/* Status line */}
-      <div style={{ padding: "0 20px 8px", fontSize: 13 }}>
-        {loading && <span>⏳ Loading restaurants from server...</span>}
-        {!loading && error && (
-          <span style={{ color: "#ff6b6b" }}>⚠ {error}</span>
-        )}
-        {!loading && !error && connected && (
-          <span style={{ color: "#4ade80" }}>● Live connection active (fake backend)</span>
-        )}
-      </div>
-
-      {/* Content */}
       <div className="res-container">
-        {loading && (
-          <div className="empty-state glass">Fetching data...</div>
-        )}
-
-        {!loading && !error && visible.length === 0 && (
-          <div className="empty-state glass">No restaurants found.</div>
-        )}
-
-        {!loading &&
-          !error &&
-          visible.map((r) => <RestaurantCard key={r.id} resData={r} />)}
+        {visibleRestaurants.map((r) => (
+          <RestaurantCard key={r.id} resData={r} />
+        ))}
       </div>
-
-      <footer className="live-note">
-        Live updates: ratings & delivery times change every few seconds (simulated)
-      </footer>
     </section>
   );
 };
