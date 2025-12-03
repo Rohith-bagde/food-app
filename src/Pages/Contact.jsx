@@ -1,4 +1,3 @@
-// Contact.jsx
 const Contact = () => (
   <div className="container glass">
     <h1>Contact</h1>
