@@ -366,17 +366,24 @@ a {
 .social-icons {
   display: flex;
   gap: 15px;
+  align-items: center;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .social-icons i {
-  font-size: 20px;
+  font-size: 22px;
   color: #e2e8f0;
-  transition: 0.2s;
+  transition: 0.25s ease-in-out;
 }
 
 .social-icons i:hover {
   color: #38bdf8;
-  transform: scale(1.2);
+  transform: scale(1.25);
 }
 
 .footer-copy {

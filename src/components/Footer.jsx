@@ -1,4 +1,5 @@
-import { LOGO_URL } from "../utils/constants";
+import React from "react";
+import {LOGO_URL} from "../utils/constants";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -6,13 +7,13 @@ const Footer = () => {
     <footer className="footer glass">
       <div className="footer-content">
 
-        {/* Logo + Title */}
+        {/* BRAND LOGO + NAME */}
         <div className="footer-brand">
           <img src={LOGO_URL} alt="FlavorFlow Logo" className="footer-logo" />
-          <h2>FlavorFlow</h2>
+          <h2 className="app-title">FlavorFlow</h2>
         </div>
 
-        {/* Quick Links */}
+        {/* QUICK LINKS */}
         <div className="footer-links">
           <h3>Quick Links</h3>
           <Link to="/">Home</Link>
@@ -21,20 +22,21 @@ const Footer = () => {
           <Link to="/cart">Cart</Link>
         </div>
 
-        {/* Socials */}
+        {/* SOCIAL LINKS */}
         <div className="footer-socials">
           <h3>Follow Us</h3>
           <div className="social-icons">
-            <a href="#"><i className="fa-brands fa-facebook"></i></a>
+            <a href="#"><i className="fa-brands fa-facebook-f"></i></a>
             <a href="#"><i className="fa-brands fa-instagram"></i></a>
             <a href="#"><i className="fa-brands fa-twitter"></i></a>
-            <a href="#"><i className="fa-brands fa-linkedin"></i></a>
+            <a href="#"><i className="fa-brands fa-linkedin-in"></i></a>
           </div>
         </div>
-
       </div>
 
-      <p className="footer-copy">© {new Date().getFullYear()} FlavorFlow — All Rights Reserved.</p>
+      <div className="footer-copy">
+        © {new Date().getFullYear()} FlavorFlow. All rights reserved.
+      </div>
     </footer>
   );
 };
