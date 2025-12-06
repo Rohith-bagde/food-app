@@ -1,26 +1,44 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import Body from "./components/Body";
+import Footer from "./components/Footer";
+
+import Home from "./Pages/Home";
 import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import Cart from "./Pages/Cart";
-import Login from "./Pages/Login";
 import RestaurantPage from "./Pages/RestaurantPage";
-import { Routes, Route } from "react-router-dom";
+import Login from "./Pages/Login";
+import Register from "./Pages/Register";
+
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 
 const App = () => {
   return (
-    <>
-      <Header />
+      <AuthProvider>
+        <CartProvider>
+          
+          {/* Header */}
+          <Header />
 
-      <Routes>
-        <Route path="/" element={<Body />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/restaurant/:id" element={<RestaurantPage />} />
-      </Routes>
-    </>
+          {/* App Content */}
+          <div className="app-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/restaurant/:id" element={<RestaurantPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </div>
+
+          {/* Footer */}
+          <Footer />
+
+        </CartProvider>
+      </AuthProvider>
   );
 };
 
