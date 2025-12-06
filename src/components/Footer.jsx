@@ -7,13 +7,11 @@ const Footer = () => {
     <footer className="footer glass">
       <div className="footer-content">
 
-        {/* BRAND LOGO + NAME */}
         <div className="footer-brand">
           <img src={LOGO_URL} alt="FlavorFlow Logo" className="footer-logo" />
-          <h2 className="app-title">FlavorFlow</h2>
+          <h2 className="app-title"><i>FlavorFlow</i></h2>
         </div>
 
-        {/* QUICK LINKS */}
         <div className="footer-links">
           <h3>Quick Links</h3>
           <Link to="/">Home</Link>
@@ -22,7 +20,6 @@ const Footer = () => {
           <Link to="/cart">Cart</Link>
         </div>
 
-        {/* SOCIAL LINKS */}
         <div className="footer-socials">
           <h3>Follow Us</h3>
           <div className="social-icons">

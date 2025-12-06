@@ -17,11 +17,7 @@ const App = () => {
   return (
       <AuthProvider>
         <CartProvider>
-          
-          {/* Header */}
           <Header />
-
-          {/* App Content */}
           <div className="app-content">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -33,8 +29,6 @@ const App = () => {
               <Route path="/register" element={<Register />} />
             </Routes>
           </div>
-
-          {/* Footer */}
           <Footer />
 
         </CartProvider>
